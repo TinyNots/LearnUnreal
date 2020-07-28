@@ -17,5 +17,7 @@ class ANIMATIONTEST_API UBTTask_FindRandomLocation : public UBTTask_BlackboardBa
 public:
     UBTTask_FindRandomLocation();
 
+    virtual void OnGameplayTaskActivated(UGameplayTask& Task) override;
+
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

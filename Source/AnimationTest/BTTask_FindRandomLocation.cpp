@@ -19,7 +19,7 @@ void UBTTask_FindRandomLocation::OnGameplayTaskActivated(UGameplayTask& Task)
 
 EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	/*AAIController* AIController = OwnerComp.GetAIOwner();
+	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (AIController)
 	{
 		UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
@@ -31,6 +31,6 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 
 		Blackboard->SetValueAsVector(TEXT("TargetLocation"), PointNavigation.Location);
 		return EBTNodeResult::Succeeded;
-	}*/
+	}
 	return EBTNodeResult::Failed;
 }

@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Behavior")
 	class UBehaviorTree* BotBehavior;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Boss")
+	class UStaticMeshComponent* WeaponStaticMeshComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -11,6 +11,11 @@ ABossAIController::ABossAIController()
 void ABossAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+
+	if (BehaviorTree)
+	{
+		RunBehaviorTree(BehaviorTree);
+	}
 }
 
 void ABossAIController::Tick(float DeltaTime)

@@ -4,6 +4,7 @@
 #include "Boss.h"
 #include "GameFramework/Controller.h"
 #include "AIController.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -11,6 +12,8 @@ ABoss::ABoss()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	WeaponStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
+	WeaponStaticMeshComponent->SetupAttachment(Cast<USceneComponent>(GetMesh()),"hand_lSocket");
 }
 
 // Called when the game starts or when spawned

@@ -15,7 +15,6 @@ class ANIMATIONTEST_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
-
 	virtual void NativeInitializeAnimation() override;
 	
 	UFUNCTION(BlueprintCallable, Category = "AnimationProperties")

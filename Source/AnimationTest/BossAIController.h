@@ -23,4 +23,6 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
+	class UBehaviorTree* BehaviorTree;
 };

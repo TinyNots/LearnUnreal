@@ -15,6 +15,8 @@ class ANIMATIONTEST_API UBossAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
+	UBossAnimInstance();
+
 	virtual void NativeInitializeAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "AnimationProperties")
@@ -28,4 +30,25 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
 	float Direction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation")
+	float RotationInterpSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation")
+	bool bShouldRotate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Jump")
+	bool bShouldJumpMove;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Jump")
+	float JumpMoveSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Jump")
+	float OriginalDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Jump")
+	float PlayerDistanceOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Jump")
+	bool bDebugLine;
 };

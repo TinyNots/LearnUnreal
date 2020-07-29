@@ -20,4 +20,9 @@ public:
 	virtual void OnGameplayTaskActivated(UGameplayTask& Task) override;
 
 	virtual void OnGameplayTaskDeactivated(UGameplayTask& Task) override;
+
+	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
+
+	UPROPERTY(EditAnywhere, Category = "General")
+	float DistanceTrigger;
 };

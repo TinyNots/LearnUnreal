@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "MainPlayer.h"
 #include "Kismet/GameplayStatics.h"
+#include "Boss.h"
 
 UBTTask_ChasePlayer::UBTTask_ChasePlayer() : Super()
 {
@@ -20,6 +21,12 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent & Ow
 {
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	AMainPlayer* Player = Cast <AMainPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	ABoss* Boss = Cast<ABoss>(AIController->GetCharacter());
+
+	if (Boss->bIsAttacking)
+	{
+		return EBTNodeResult::InProgress;
+	}
 
 	AIController->MoveToLocation(Player->GetActorLocation());
 	return EBTNodeResult::Succeeded;

@@ -7,6 +7,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "MainPlayer.h"
+#include "BossAIController.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -16,10 +19,12 @@ ABoss::ABoss()
 
 	WeaponStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
 	WeaponStaticMeshComponent->SetupAttachment(Cast<USceneComponent>(GetMesh()),"hand_lSocket");
+	WeaponStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	bDebugSpecificAttacak = false;
 	SpecificAttackNumber = 0;
 	bIsAttacking = false;
+	CombatRange = 400.0f;
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +37,13 @@ void ABoss::BeginPlay()
 	{
 		AIController->RunBehaviorTree(BotBehavior);
 	}
+
+	WeaponStaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ABoss::CombatOnOverlapBegin);
+	WeaponStaticMeshComponent->OnComponentEndOverlap.AddDynamic(this, &ABoss::CombatOnOverlapEnd);
+
+	CombatTarget = Cast<AMainPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
+	BossAI = Cast<ABossAIController>(GetController());
 }
 
 // Called every frame
@@ -39,6 +51,10 @@ void ABoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!bIsAttacking && GetDistanceTo(Cast<AActor>(CombatTarget)) <= CombatRange)
+	{
+		StartAttack();
+	}
 }
 
 // Called to bind functionality to input
@@ -65,7 +81,10 @@ void ABoss::StartAttack()
 			RandomAttackNumber = SpecificAttackNumber;
 		}
 
+		FOnMontageEnded EndDelegate;
+		EndDelegate.BindUObject(this, &ABoss::OnAnimationEnded);		
 		AnimInstance->Montage_Play(CombatMontage);
+		AnimInstance->Montage_SetEndDelegate(EndDelegate);
 
 		switch (RandomAttackNumber)
 		{
@@ -88,5 +107,25 @@ void ABoss::StartAttack()
 			AnimInstance->Montage_JumpToSection(TEXT("Combo01"));
 			break;
 		}
+
+		bIsAttacking = true;
 	}
+}
+
+void ABoss::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == Cast<AActor>(CombatTarget))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player !!"));
+	}
+}
+
+void ABoss::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+
+}
+
+void ABoss::OnAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	bIsAttacking = false;
 }

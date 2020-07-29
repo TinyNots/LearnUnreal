@@ -5,6 +5,8 @@
 #include "GameFramework/Controller.h"
 #include "AIController.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimInstance.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -14,6 +16,10 @@ ABoss::ABoss()
 
 	WeaponStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
 	WeaponStaticMeshComponent->SetupAttachment(Cast<USceneComponent>(GetMesh()),"hand_lSocket");
+
+	bDebugSpecificAttacak = false;
+	SpecificAttackNumber = 0;
+	bIsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -40,4 +46,47 @@ void ABoss::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ABoss::StartAttack()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && CombatMontage)
+	{
+		if (AnimInstance->Montage_IsPlaying(CombatMontage))
+		{
+			return;
+		}
+
+		int RandomAttackNumber = FMath::RandRange(0, 4);
+
+		if (bDebugSpecificAttacak)
+		{
+			RandomAttackNumber = SpecificAttackNumber;
+		}
+
+		AnimInstance->Montage_Play(CombatMontage);
+
+		switch (RandomAttackNumber)
+		{
+		case 0:
+			AnimInstance->Montage_JumpToSection(TEXT("Combo01"));
+			break;
+		case 1:
+			AnimInstance->Montage_JumpToSection(TEXT("Combo02"));
+			break;
+		case 2:
+			AnimInstance->Montage_JumpToSection(TEXT("Combo03"));
+			break;
+		case 3:
+			AnimInstance->Montage_JumpToSection(TEXT("Combo04"));
+			break;
+		case 4:
+			AnimInstance->Montage_JumpToSection(TEXT("JumpAttack"));
+			break;
+		default:
+			AnimInstance->Montage_JumpToSection(TEXT("Combo01"));
+			break;
+		}
+	}
 }

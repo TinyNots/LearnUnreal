@@ -32,4 +32,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	class UAnimMontage* CombatMontage;
+
+	void StartAttack();
+
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	bool bDebugSpecificAttacak;
+
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	int SpecificAttackNumber;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
+	bool bIsAttacking;
 };

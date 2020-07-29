@@ -16,6 +16,7 @@ AItem::AItem()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(GetRootComponent());
+	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	CollectSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollectSphere"));
 	CollectSphere->SetupAttachment(StaticMeshComponent);

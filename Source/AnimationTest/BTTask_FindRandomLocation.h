@@ -20,4 +20,7 @@ public:
     virtual void OnGameplayTaskActivated(UGameplayTask& Task) override;
 
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+    UPROPERTY(EditAnywhere, Category = "General")
+    float DestinationRadius;
 };

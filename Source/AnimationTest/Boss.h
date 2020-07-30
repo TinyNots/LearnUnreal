@@ -62,4 +62,15 @@ public:
 	float CombatRange;
 
 	void OnAnimationEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	int OldAttackNumber;
+
+	void StartJumpAttack();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	float DistanceToCombatTarget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float JumpAttackRange;
 };

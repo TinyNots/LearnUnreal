@@ -27,7 +27,7 @@ bool UBTDecorator_CheckDistance::CalculateRawConditionValue(UBehaviorTreeCompone
 	ABossAIController* BossAI = Cast<ABossAIController>(OwnerComp.GetAIOwner());
 	ABoss* Boss = Cast<ABoss>(BossAI->GetCharacter());
 
-	float Distance = Boss->GetDistanceTo(Cast<AActor>(Boss->CombatTarget));
+	float Distance = Boss->DistanceToCombatTarget;
 	if (Distance <= DistanceTrigger)
 	{
 		return true;

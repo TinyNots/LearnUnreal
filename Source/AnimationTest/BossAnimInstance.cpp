@@ -9,6 +9,7 @@
 
 UBossAnimInstance::UBossAnimInstance()
 {
+	OriginalRotateInterpSpeed = 0.0f;
 	bDebugLine = false;
 }
 
@@ -41,16 +42,16 @@ void UBossAnimInstance::UpdateAnimationProperties()
 
 		if (bShouldJumpMove)
 		{
-			float Distance = Boss->GetDistanceTo(Cast<AActor>(Boss->CombatTarget));
-			float InterpSpeed = JumpMoveSpeed * (FMath::Clamp(Distance - PlayerDistanceOffset, 0.0f, OriginalDistance) / OriginalDistance);
+			float Distance = Boss->DistanceToCombatTarget;
+			float JumpMoveInterpSpeed = JumpMoveSpeed * (FMath::Clamp(Distance - PlayerDistanceOffset, 0.0f, OriginalDistance) / OriginalDistance);
 
-			if (InterpSpeed > 0.0f)
+			if (JumpMoveInterpSpeed > 0.0f)
 			{
 				FVector NewLocation = UKismetMathLibrary::VInterpTo(
 					Boss->GetActorLocation(),
 					Boss->CombatTarget->GetActorLocation(),
 					GetWorld()->GetDeltaSeconds(),
-					InterpSpeed);
+					JumpMoveInterpSpeed);
 
 				Boss->SetActorLocation(NewLocation);
 			}

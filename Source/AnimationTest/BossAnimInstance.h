@@ -37,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation")
 	bool bShouldRotate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation")
+	float OriginalRotateInterpSpeed;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Jump")
 	bool bShouldJumpMove;
 

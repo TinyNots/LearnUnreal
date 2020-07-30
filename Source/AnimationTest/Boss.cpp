@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MainPlayer.h"
 #include "BossAIController.h"
+#include "Engine/Engine.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -25,6 +26,8 @@ ABoss::ABoss()
 	SpecificAttackNumber = 0;
 	bIsAttacking = false;
 	CombatRange = 400.0f;
+	OldAttackNumber = 0;
+	JumpAttackRange = 1000.0f;
 }
 
 // Called when the game starts or when spawned
@@ -51,10 +54,12 @@ void ABoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsAttacking && GetDistanceTo(Cast<AActor>(CombatTarget)) <= CombatRange)
+	DistanceToCombatTarget = GetDistanceTo(Cast<AActor>(CombatTarget));
+
+	/*if (!bIsAttacking && DistanceToCombatTarget <= CombatRange)
 	{
 		StartAttack();
-	}
+	}*/
 }
 
 // Called to bind functionality to input
@@ -74,7 +79,11 @@ void ABoss::StartAttack()
 			return;
 		}
 
-		int RandomAttackNumber = FMath::RandRange(0, 4);
+		int RandomAttackNumber = FMath::RandRange(0, 3);
+		while (RandomAttackNumber == OldAttackNumber)
+		{
+			RandomAttackNumber = FMath::RandRange(0, 3);
+		}
 
 		if (bDebugSpecificAttacak)
 		{
@@ -100,15 +109,13 @@ void ABoss::StartAttack()
 		case 3:
 			AnimInstance->Montage_JumpToSection(TEXT("Combo04"));
 			break;
-		case 4:
-			AnimInstance->Montage_JumpToSection(TEXT("JumpAttack"));
-			break;
 		default:
 			AnimInstance->Montage_JumpToSection(TEXT("Combo01"));
 			break;
 		}
 
 		bIsAttacking = true;
+		OldAttackNumber = RandomAttackNumber;
 	}
 }
 
@@ -116,7 +123,7 @@ void ABoss::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor == Cast<AActor>(CombatTarget))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player !!"));
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("Player !!"));
 	}
 }
 
@@ -128,4 +135,24 @@ void ABoss::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor*
 void ABoss::OnAnimationEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	bIsAttacking = false;
+}
+
+void ABoss::StartJumpAttack()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && CombatMontage)
+	{
+		if (AnimInstance->Montage_IsPlaying(CombatMontage))
+		{
+			return;
+		}
+
+		FOnMontageEnded EndDelegate;
+		EndDelegate.BindUObject(this, &ABoss::OnAnimationEnded);
+		AnimInstance->Montage_Play(CombatMontage);
+		AnimInstance->Montage_SetEndDelegate(EndDelegate);
+		AnimInstance->Montage_JumpToSection(TEXT("JumpAttack"));
+
+		bIsAttacking = true;
+	}
 }

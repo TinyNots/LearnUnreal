@@ -23,11 +23,6 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent & Ow
 	AMainPlayer* Player = Cast <AMainPlayer>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	ABoss* Boss = Cast<ABoss>(AIController->GetCharacter());
 
-	if (Boss->bIsAttacking)
-	{
-		return EBTNodeResult::InProgress;
-	}
-
 	AIController->MoveToLocation(Player->GetActorLocation());
 	return EBTNodeResult::Succeeded;
 }

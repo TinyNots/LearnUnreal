@@ -11,6 +11,7 @@
 #include "MainPlayer.h"
 #include "BossAIController.h"
 #include "Engine/Engine.h"
+#include "HealthComponent.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -21,6 +22,8 @@ ABoss::ABoss()
 	WeaponStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
 	WeaponStaticMeshComponent->SetupAttachment(Cast<USceneComponent>(GetMesh()),"hand_lSocket");
 	WeaponStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 
 	bDebugSpecificAttacak = false;
 	SpecificAttackNumber = 0;

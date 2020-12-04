@@ -74,6 +74,15 @@ void AMainPlayer::BeginPlay()
 	AnimInstance = GetMesh()->GetAnimInstance();
 }
 
+void AMainPlayer::Attack()
+{
+	UAnimMontage* MyAnimMontage = EquippedWeapon->GetAnimationMontage();
+	if (AnimInstance && EquippedWeapon && MyAnimMontage)
+	{
+		AnimInstance->Montage_Play(MyAnimMontage);
+	}
+}
+
 // Called every frame
 void AMainPlayer::Tick(float DeltaTime)
 {
@@ -142,6 +151,8 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("Roll", EInputEvent::IE_Pressed, this, &AMainPlayer::RollStart);
 	PlayerInputComponent->BindAction("Pickup", EInputEvent::IE_Pressed, this, &AMainPlayer::UsePickupItem);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainPlayer::Attack);
 }
 
 void AMainPlayer::MoveForward(float Value)

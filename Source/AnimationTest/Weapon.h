@@ -6,24 +6,29 @@
 #include "Item.h"
 #include "Weapon.generated.h"
 
-/**
- * 
- */
+class UAnimMontage;
+
 UCLASS()
 class ANIMATIONTEST_API AWeapon : public AItem
 {
 	GENERATED_BODY()
 	
 public:
+
 	AWeapon();
+
+protected:
+
+	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
 	class UBoxComponent* CombatBox;
 
-protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	UAnimMontage* AnimationMontage;
 
 public:
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
@@ -39,4 +44,6 @@ public:
 	void EquipWeapon(class AMainPlayer* Player);
 
 	virtual void Pickup(class AMainPlayer* Player) override;
+
+	UAnimMontage* GetAnimationMontage();
 };

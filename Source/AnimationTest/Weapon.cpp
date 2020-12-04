@@ -21,6 +21,11 @@ void AWeapon::BeginPlay()
 
 	CombatBox->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapBegin);
 	CombatBox->OnComponentEndOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapEnd);
+
+	if (!AnimationMontage)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon Animation Montage is empty. Please insert the assert."));
+	}
 }
 
 void AWeapon::Tick(float DeltaTime)
@@ -81,4 +86,9 @@ void AWeapon::Pickup(AMainPlayer* Player)
 	{
 		Player->SetSelectedItem(nullptr);
 	}
+}
+
+UAnimMontage* AWeapon::GetAnimationMontage()
+{
+	return AnimationMontage;
 }
